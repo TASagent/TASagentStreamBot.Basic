@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 
 using TASagentTwitchBot.Core;
 using TASagentTwitchBot.Core.Database;
+using TASagentTwitchBot.Core.Donations;
 using TASagentTwitchBot.Core.Notifications;
 using TASagentTwitchBot.Core.Web.Hubs;
 
@@ -37,6 +38,8 @@ public class TTSOnlyActivityProvider :
         this.ttsMarqueeHubContext = ttsMarqueeHubContext;
     }
 
+    #region IActivityHandler
+
     public Task Execute(ActivityRequest activityRequest)
     {
         List<Task> taskList = new List<Task>();
@@ -55,6 +58,12 @@ public class TTSOnlyActivityProvider :
         return Task.WhenAll(taskList).WithCancellation(generalTokenSource.Token);
     }
 
+    public void RegisterDonationTracker(IDonationTracker donationTracker)
+    {
+        //Disregard, we don't need this information
+    }
+
+    #endregion IActivityHandler
     #region ITTSHandler
 
     bool ITTSHandler.IsTTSVoiceValid(string voice) => ttsRenderer.IsTTSVoiceValid(voice);
